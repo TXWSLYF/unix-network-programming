@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <string.h>
 
 int main()
 {
@@ -40,9 +41,9 @@ int main()
     // 等待客户请求
     while (1)
     {
-        char ch;
         int fd;
         int nread;
+        char buf[100];
 
         // 每次运行 select 之前需要拷贝一份需要监听的文件描述符，因为 select 调用会修改入参
         testfds = readfds;
@@ -94,10 +95,11 @@ int main()
                     // 客户请求数据到达
                     else
                     {
-                        read(fd, &ch, 1);
+                        // TODO:研究如何完整读取客户端发来的信息
+                        read(fd, buf, 100);
                         printf("serving client on fd %d\n", fd);
-                        ch++;
-                        write(fd, &ch, 1);
+                        write(fd, buf, 100);
+                        memset(buf, 0, sizeof(buf));
                     }
                 }
             }
