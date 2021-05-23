@@ -184,6 +184,7 @@ int main()
         return 1;
     }
 
+    // 创建 epoll 的文件描述符
     int epollfd = epoll_create1(0);
     if (epollfd == -1)
     {
