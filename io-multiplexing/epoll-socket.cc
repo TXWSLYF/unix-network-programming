@@ -1,7 +1,6 @@
 #include <sys/epoll.h>
 #include "my-socket.h"
 #include <iostream>
-#include <cstring>
 
 #define MAX_EVENTS 10
 #define BUF_SIZE 100
@@ -31,7 +30,7 @@ int main()
      */
     event.data.fd = server_fd;
     event.events = EPOLLIN | EPOLLET;
-    if (epoll_ctl(epollfd, EPOLL_CTL_ADD, socketfd, &event) != 0)
+    if (epoll_ctl(epollfd, EPOLL_CTL_ADD, server_fd, &event) != 0)
     {
         exit(errno);
     }
