@@ -1,6 +1,7 @@
 #include <sys/epoll.h>
 #include "my-socket.h"
 #include <iostream>
+#include <cstring>
 
 #define MAX_EVENTS 10
 #define BUF_SIZE 100
@@ -28,7 +29,7 @@ int main()
      * EPOLLET:Requests edge-triggered(边缘触发) notification for the associated file descriptor
      * TODO: 边缘触发和水平触发的区别和适用场景
      */
-    event.data.fd = socketfd;
+    event.data.fd = server_fd;
     event.events = EPOLLIN | EPOLLET;
     if (epoll_ctl(epollfd, EPOLL_CTL_ADD, socketfd, &event) != 0)
     {
@@ -58,7 +59,7 @@ int main()
                 int client_fd = accept(server_fd, NULL, NULL);
                 event.data.fd = client_fd;
                 event.events = EPOLLIN | EPOLLET;
-                epoll_ctl(epollfd, EPOLL_CTL_ADD, client_fd, event);
+                epoll_ctl(epollfd, EPOLL_CTL_ADD, client_fd, &event);
                 std::cout << "新建连接:" << client_fd << std::endl;
             }
             else
