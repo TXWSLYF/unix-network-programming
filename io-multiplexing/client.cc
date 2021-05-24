@@ -4,18 +4,18 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
+#define BUF_SIZE 100
+
 using namespace std;
 
 int main()
 {
     // 创建套接字
     int sock = socket(AF_INET, SOCK_STREAM, 0);
-
-    string ip;
+    char buffer[BUF_SIZE] = {0};
+    string ip = "127.0.0.1";
     int port;
 
-    cout << "请输入 ip:" << endl;
-    cin >> ip;
     cout << "请输入 port:" << endl;
     cin >> port;
 
@@ -34,10 +34,22 @@ int main()
         cin >> message;
         write(sock, message.c_str(), sizeof(message.c_str()));
 
-        // 读取服务器返回的数据
-        char buffer[400];
-        read(sock, buffer, 400);
-        printf("Message form server: %s\n", buffer);
+        while (1)
+        {
+            int read_len = read(sock, buffer, BUF_SIZE);
+            std::cout << "读取服务端数据：" << read_len << std::endl;
+
+            if (read_len < 0)
+            {
+                exit(read_len);
+            }
+            // 服务器主动断开连接时会触发
+            if (read_len == 0)
+            {
+                std::cout << "读取完毕！" << std::endl;
+                break;
+            }
+        }
     }
 
     //关闭套接字
