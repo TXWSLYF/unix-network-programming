@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     /* Connect socket to socket address. */
 
     addr.sun_family = AF_UNIX;
-    strncpy(addr.sun_path, SOCKET_NAME, sizeof(addr.sun_path) - 1);
+    strncpy(addr.sun_path, SOCK_SEQPACKET, sizeof(addr.sun_path) - 1);
 
     ret = connect(data_socket, (const struct sockaddr *)&addr,
                   sizeof(addr));

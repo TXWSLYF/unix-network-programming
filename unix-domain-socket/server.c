@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
     /* Create local socket. */
 
-    connection_socket = socket(AF_UNIX, SOCK_STREAM, 0);
+    connection_socket = socket(AF_UNIX, SOCK_SEQPACKET, 0);
     if (connection_socket == -1)
     {
         perror("socket");
